@@ -56,7 +56,10 @@ var getLocation = function () {
 };
 
 var shuffleArray = function (array) {
-  var j, x, i;
+  var j;
+  var x;
+  var i;
+
   for (i = array.length - 1; i > 0; i--) {
     j = Math.floor(Math.random() * (i + 1));
     x = array[i];
