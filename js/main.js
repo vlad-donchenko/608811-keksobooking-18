@@ -6,9 +6,10 @@ var COUNT_OFFERS = 8;
 var MAP_ADS_HEIGHT = 630;
 var MAP_ADS_Y_START_POINTS = 130;
 var MAP_ADS_X_START_POINTS = 1;
+var ads = [];
 var map = document.querySelector('.map');
 var itemContainer = map.querySelector('.map__pins');
-var MAP_ADS_WIDTH = itemContainer.offsetWidth;
+var mapWidth = itemContainer.offsetWidth;
 var times = ['12:00', '13:00', '14:00'];
 var features = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var photos = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
@@ -71,7 +72,7 @@ var shuffleArray = function (array) {
 };
 
 var getAdsTemplate = function (index) {
-  var ads = {
+  return {
     'author': {
       'avatar': 'img/avatars/user0' + (index + 1) + '.png'
     },
@@ -85,43 +86,36 @@ var getAdsTemplate = function (index) {
       'checkin': times[randomInteger(0, 2)],
       'checkout': times[randomInteger(0, 2)],
       'features': shuffleArray(features.slice(0, randomInteger(1, features.length))),
-      'description': 'Сдается в аренду ',
+      'description': 'Произвольный текст',
       'photos': shuffleArray(photos.slice(0, randomInteger(1, photos.length)))
     },
     'location': {
-      x: randomInteger(MAP_ADS_X_START_POINTS, MAP_ADS_WIDTH),
+      x: randomInteger(MAP_ADS_X_START_POINTS, mapWidth),
       y: randomInteger(MAP_ADS_Y_START_POINTS, MAP_ADS_HEIGHT)
     }
   };
-
-  ads.offer.description = 'По адресу ' + ads.offer.address + ' по цене: ' + ads.offer.price + ' сдам ' + types[ads.offer.type].ru + ' количество комнат: ' + ads.offer.rooms + ' рассчитано на количество гостей: ' + ads.offer.guests + ' заехать можно в - ' + ads.offer.checkin + ' сдать ключи в - ' + ads.offer.checkout;
-
-  return ads;
 };
 
 var getAds = function (count) {
-  var ads = [];
-
   for (var i = 0; i < count; i++) {
     ads.push(getAdsTemplate(i));
   }
-
-  return ads;
 };
 
-var getNewMarkers = function (template, index) {
-  var adsItems = getAds(COUNT_OFFERS);
-  var item = template.cloneNode(true);
+getAds(COUNT_OFFERS);
+
+var getNewMarkers = function (object) {
+  var item = adsMarkerTemplate.cloneNode(true);
   var itemButton = item.querySelector('.map__pin');
   var markerImage = itemButton.querySelector('img');
-  itemButton.style.left = adsItems[index].location.x - MARKER_WIDTH / 2 + 'px';
-  itemButton.style.top = adsItems[index].location.y - MARKER_HEIGHT + 'px';
-  markerImage.src = adsItems[index].author.avatar;
+  itemButton.style.left = object.location.x - MARKER_WIDTH / 2 + 'px';
+  itemButton.style.top = object.location.y - MARKER_HEIGHT + 'px';
+  markerImage.src = object.author.avatar;
   itemContainer.appendChild(item);
 
   return item;
 };
 
 for (var i = 0; i < COUNT_OFFERS; i++) {
-  getNewMarkers(adsMarkerTemplate, i);
+  getNewMarkers(ads[i]);
 }
