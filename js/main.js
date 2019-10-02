@@ -140,32 +140,17 @@ var getofferModal = function (object) {
   modalUserAvatar.src = object.author.avatar;
 
   var addFeatures = function (array) {
+    var START_SLICE = 31;
     var childrens = modalFeatures.querySelectorAll('.popup__feature');
-    for (var i = 0; i < array.length; i++) {
-      switch (array[i]) {
-        case 'wifi':
-          modalFeatures.children[0].textContent = array[i];
-          break;
-        case 'dishwasher':
-          modalFeatures.children[1].textContent = array[i];
-          break;
-        case 'parking':
-          modalFeatures.children[2].textContent = array[i];
-          break;
-        case 'washer':
-          modalFeatures.children[3].textContent = array[i];
-          break;
-        case 'elevator':
-          modalFeatures.children[4].textContent = array[i];
-          break;
-        case 'conditioner':
-          modalFeatures.children[5].textContent = array[i];
-          break;
-      }
-    }
-    for (var j = 0; j < childrens.length; j++) {
-      if (childrens[j].textContent === '') {
-        childrens[j].remove();
+
+    var getFeaturesName = function (string) {
+      return string === strFeatures;
+    };
+
+    for (var i = 0; i < childrens.length; i++) {
+      var strFeatures = childrens[i].className.slice(START_SLICE);
+      if (!(array.some(getFeaturesName))) {
+        childrens[i].remove();
       }
     }
   };
