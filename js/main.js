@@ -140,16 +140,10 @@ var getofferModal = function (object) {
   modalUserAvatar.src = object.author.avatar;
 
   var addFeatures = function (array) {
-    var START_SLICE = 31;
     var childrens = modalFeatures.querySelectorAll('.popup__feature');
-
-    var getFeaturesName = function (string) {
-      return string === strFeatures;
-    };
-
     for (var i = 0; i < childrens.length; i++) {
-      var strFeatures = childrens[i].className.slice(START_SLICE);
-      if (!(array.some(getFeaturesName))) {
+      var featureName = childrens[i].classList[1].replace('popup__feature--', '');
+      if (array.indexOf(featureName) === -1) {
         childrens[i].remove();
       }
     }
