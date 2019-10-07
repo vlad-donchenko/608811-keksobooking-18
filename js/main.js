@@ -1,13 +1,16 @@
 'use strict';
 
+var MAIN_MARKER_HEIGHT = 80;
+var MAIN_MARKER_WIDTH = 65;
 var MIN_ADS_PRICE = 1000;
 var MAX_ADS_PRICE = 10000;
 var COUNT_OFFERS = 8;
 var MAP_ADS_HEIGHT = 630;
 var MAP_ADS_Y_START_POINTS = 130;
 var MAP_ADS_X_START_POINTS = 1;
-var MARKER_WIDTH = 65;
-var MARKER_HEIGHT = 87;
+var MARKER_WIDTH = 50;
+var MARKER_HEIGHT = 70;
+var ENTER_KEYCODE = 13;
 var ads = [];
 var map = document.querySelector('.map');
 var itemContainer = map.querySelector('.map__pins');
@@ -19,6 +22,13 @@ var typesNames = ['palace', 'flat', 'house', 'bungalo'];
 var adsMarkerTemplate = document.querySelector('#pin').content;
 var offerInfoModalTemplate = document.querySelector('#card').content;
 var mapFilter = map.querySelector('.map__filters-container');
+var mainMarker = map.querySelector('.map__pin--main');
+var notice = document.querySelector('.notice');
+var startMainMarkerPositionX = Math.round(mainMarker.offsetLeft + MAIN_MARKER_WIDTH / 2);
+var startMainMarkerPositionY = Math.round(mainMarker.offsetTop + MAIN_MARKER_HEIGHT);
+notice.querySelector('#address').value = startMainMarkerPositionX + ', ' + startMainMarkerPositionY;
+var roomNumberSelect = notice.querySelector('#room_number');
+var capacitySelect = notice.querySelector('#capacity');
 var types = {
   palace: {
     eng: 'palace',
@@ -38,11 +48,12 @@ var types = {
   }
 };
 
-var activateMap = function (element) {
-  element.classList.remove('map--faded');
+var ROOMS_CAPACITY = {
+  '1': ['1'],
+  '2': ['2', '1'],
+  '3': ['3', '2', '1'],
+  '100': ['0']
 };
-
-activateMap(map);
 
 var randomInteger = function (min, max) {
   var rand = min - 0.5 + Math.random() * (max - min + 1);
@@ -171,3 +182,29 @@ for (var i = 0; i < COUNT_OFFERS; i++) {
 }
 
 getofferModal((ads[0]));
+
+var onMainMarkerMouseDown = function () {
+  map.classList.remove('map--faded');
+};
+
+var onMainMarkerKeydown = function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    onMainMarkerMouseDown();
+  }
+};
+
+var onRoomNumberChange = function () {
+  if (capacitySelect.options.length > 0) {
+    [].forEach.call(capacitySelect.options, function (item) {
+      item.selected = (ROOMS_CAPACITY[roomNumberSelect.value][0] === item.value) ? true : false;
+      item.hidden = (ROOMS_CAPACITY[roomNumberSelect.value].indexOf(item.value) >= 0) ? false : true;
+    });
+  }
+};
+
+onRoomNumberChange();
+
+mainMarker.addEventListener('mousedown', onMainMarkerMouseDown);
+mainMarker.addEventListener('keydown', onMainMarkerKeydown);
+roomNumberSelect.addEventListener('change', onRoomNumberChange);
+
