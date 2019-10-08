@@ -177,14 +177,14 @@ var getofferModal = function (object) {
   map.insertBefore(modal, mapFilter);
 };
 
-for (var i = 0; i < COUNT_OFFERS; i++) {
-  getNewMarkers(ads[i]);
-}
-
-getofferModal((ads[0]));
-
 var onMainMarkerMouseDown = function () {
   map.classList.remove('map--faded');
+  for (var i = 0; i < COUNT_OFFERS; i++) {
+    getNewMarkers(ads[i]);
+  }
+  getofferModal((ads[0]));
+  mainMarker.removeEventListener('mousedown', onMainMarkerMouseDown);
+  mainMarker.removeEventListener('keydown', onMainMarkerKeydown);
 };
 
 var onMainMarkerKeydown = function (evt) {
@@ -196,8 +196,10 @@ var onMainMarkerKeydown = function (evt) {
 var onRoomNumberChange = function () {
   if (capacitySelect.options.length > 0) {
     [].forEach.call(capacitySelect.options, function (item) {
-      item.selected = (ROOMS_CAPACITY[roomNumberSelect.value][0] === item.value) ? true : false;
-      item.hidden = (ROOMS_CAPACITY[roomNumberSelect.value].indexOf(item.value) >= 0) ? false : true;
+      var status = !(ROOMS_CAPACITY[roomNumberSelect.value].indexOf(item.value) >= 0);
+      item.selected = (ROOMS_CAPACITY[roomNumberSelect.value][0] === item.value);
+      item.hidden = status;
+      item.disabled = status;
     });
   }
 };
@@ -207,4 +209,3 @@ onRoomNumberChange();
 mainMarker.addEventListener('mousedown', onMainMarkerMouseDown);
 mainMarker.addEventListener('keydown', onMainMarkerKeydown);
 roomNumberSelect.addEventListener('change', onRoomNumberChange);
-
