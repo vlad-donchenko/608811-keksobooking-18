@@ -29,6 +29,8 @@ var startMainMarkerPositionY = Math.round(mainMarker.offsetTop + MAIN_MARKER_HEI
 notice.querySelector('#address').value = startMainMarkerPositionX + ', ' + startMainMarkerPositionY;
 var roomNumberSelect = notice.querySelector('#room_number');
 var capacitySelect = notice.querySelector('#capacity');
+var mainForm = notice.querySelector('.ad-form');
+var mainFormFieldsets = mainForm.querySelectorAll('fieldset');
 var types = {
   palace: {
     eng: 'palace',
@@ -177,12 +179,27 @@ var getofferModal = function (object) {
   map.insertBefore(modal, mapFilter);
 };
 
+var disabledNoticeForm = function () {
+  for (var i = 0; i < mainFormFieldsets.length; i++) {
+    mainFormFieldsets[i].setAttribute('disabled', 'disabled');
+  }
+};
+
+var activeNoticeForm = function () {
+  for (var i = 0; i < mainFormFieldsets.length; i++) {
+    mainFormFieldsets[i].removeAttribute('disabled');
+  }
+
+  mainForm.classList.remove('ad-form--disabled');
+};
+
 var onMainMarkerMouseDown = function () {
   map.classList.remove('map--faded');
   for (var i = 0; i < COUNT_OFFERS; i++) {
     getNewMarkers(ads[i]);
   }
   getofferModal((ads[0]));
+  activeNoticeForm();
   mainMarker.removeEventListener('mousedown', onMainMarkerMouseDown);
   mainMarker.removeEventListener('keydown', onMainMarkerKeydown);
 };
@@ -194,6 +211,7 @@ var onMainMarkerKeydown = function (evt) {
 };
 
 var onRoomNumberChange = function () {
+
   if (capacitySelect.options.length > 0) {
     [].forEach.call(capacitySelect.options, function (item) {
       var status = !(ROOMS_CAPACITY[roomNumberSelect.value].indexOf(item.value) >= 0);
@@ -204,8 +222,8 @@ var onRoomNumberChange = function () {
   }
 };
 
+disabledNoticeForm();
 onRoomNumberChange();
-
 mainMarker.addEventListener('mousedown', onMainMarkerMouseDown);
 mainMarker.addEventListener('keydown', onMainMarkerKeydown);
 roomNumberSelect.addEventListener('change', onRoomNumberChange);
