@@ -11,6 +11,7 @@ var MAP_ADS_X_START_POINTS = 1;
 var MARKER_WIDTH = 50;
 var MARKER_HEIGHT = 70;
 var ENTER_KEYCODE = 13;
+var ESC_KEYCODE = 27;
 var ads = [];
 var map = document.querySelector('.map');
 var itemContainer = map.querySelector('.map__pins');
@@ -119,18 +120,6 @@ var getAds = function (count) {
 
 getAds(COUNT_OFFERS);
 
-var getNewMarkers = function (object) {
-  var item = adsMarkerTemplate.cloneNode(true);
-  var itemButton = item.querySelector('.map__pin');
-  var markerImage = itemButton.querySelector('img');
-  itemButton.style.left = object.location.x - MARKER_WIDTH / 2 + 'px';
-  itemButton.style.top = object.location.y - MARKER_HEIGHT + 'px';
-  markerImage.src = object.author.avatar;
-  itemContainer.appendChild(item);
-
-  return item;
-};
-
 var getofferModal = function (object) {
   var modal = offerInfoModalTemplate.cloneNode(true);
   var modalTitle = modal.querySelector('.popup__title');
@@ -176,7 +165,35 @@ var getofferModal = function (object) {
   };
   addPhoto(object.offer.photos);
 
+  var modalWrapper = map.querySelector('.popup');
+
+  if (modalWrapper) {
+    modalWrapper.remove();
+  }
+
   map.insertBefore(modal, mapFilter);
+};
+
+var getNewMarkers = function (object) {
+  var item = adsMarkerTemplate.cloneNode(true);
+  var itemButton = item.querySelector('.map__pin');
+  var markerImage = itemButton.querySelector('img');
+  itemButton.style.left = object.location.x - MARKER_WIDTH / 2 + 'px';
+  itemButton.style.top = object.location.y - MARKER_HEIGHT + 'px';
+  markerImage.src = object.author.avatar;
+  itemContainer.appendChild(item);
+
+  itemButton.addEventListener('click', function () {
+    getofferModal(object);
+  });
+
+  itemButton.addEventListener('keyup', function (evt) {
+    if (evt.keyCode === ENTER_KEYCODE) {
+      getofferModal(object);
+    }
+  });
+
+  return item;
 };
 
 var disabledNoticeForm = function () {
@@ -198,7 +215,6 @@ var onMainMarkerMouseDown = function () {
   for (var i = 0; i < COUNT_OFFERS; i++) {
     getNewMarkers(ads[i]);
   }
-  getofferModal((ads[0]));
   activeNoticeForm();
   mainMarker.removeEventListener('mousedown', onMainMarkerMouseDown);
   mainMarker.removeEventListener('keydown', onMainMarkerKeydown);
