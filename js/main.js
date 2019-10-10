@@ -32,22 +32,30 @@ var roomNumberSelect = notice.querySelector('#room_number');
 var capacitySelect = notice.querySelector('#capacity');
 var mainForm = notice.querySelector('.ad-form');
 var mainFormFieldsets = mainForm.querySelectorAll('fieldset');
+var typeSelect = notice.querySelector('#type');
+var priceInput = notice.querySelector('#price');
+var checkInSelect = notice.querySelector('#timein');
+var checkOutSelect = notice.querySelector('#timeout');
 var types = {
   palace: {
     eng: 'palace',
-    ru: 'дворец'
+    ru: 'дворец',
+    startPrice: 10000
   },
   flat: {
     eng: 'flat',
-    ru: 'квартира'
+    ru: 'квартира',
+    startPrice: 1000
   },
   house: {
     eng: 'house',
-    ru: 'дом'
+    ru: 'дом',
+    startPrice: 5000
   },
   bungalo: {
     eng: 'bungalo',
-    ru: 'бунгало'
+    ru: 'бунгало',
+    startPrice: 0
   }
 };
 
@@ -120,6 +128,13 @@ var getAds = function (count) {
 
 getAds(COUNT_OFFERS);
 
+var removeModal = function () {
+  var modal = map.querySelector('.popup');
+  if (modal) {
+    modal.remove();
+  }
+};
+
 var getofferModal = function (object) {
   var modal = offerInfoModalTemplate.cloneNode(true);
   var modalTitle = modal.querySelector('.popup__title');
@@ -165,11 +180,7 @@ var getofferModal = function (object) {
   };
   addPhoto(object.offer.photos);
 
-  var modalWrapper = map.querySelector('.popup');
-
-  if (modalWrapper) {
-    modalWrapper.remove();
-  }
+  removeModal();
 
   map.insertBefore(modal, mapFilter);
 };
@@ -183,13 +194,31 @@ var getNewMarkers = function (object) {
   markerImage.src = object.author.avatar;
   itemContainer.appendChild(item);
 
+  var closeModal = function () {
+    var modal = map.querySelector('.popup');
+    var buttonClose = modal.querySelector('.popup__close');
+
+    buttonClose.addEventListener('click', function () {
+      removeModal();
+    });
+
+    document.addEventListener('keydown', function (evt) {
+      if (evt.keyCode === ESC_KEYCODE) {
+        removeModal();
+      }
+    });
+  };
+
+
   itemButton.addEventListener('click', function () {
     getofferModal(object);
+    closeModal();
   });
 
   itemButton.addEventListener('keyup', function (evt) {
     if (evt.keyCode === ENTER_KEYCODE) {
       getofferModal(object);
+      closeModal();
     }
   });
 
@@ -238,8 +267,28 @@ var onRoomNumberChange = function () {
   }
 };
 
+var onTypeValidationChange = function () {
+  priceInput.min = types[typeSelect.value].startPrice;
+  priceInput.placeholder = types[typeSelect.value].startPrice;
+};
+
+var onCheckInChange = function () {
+  for (var i = 0; i < checkOutSelect.options.length; i++) {
+    checkOutSelect.options[i].selected = (checkInSelect.value === checkOutSelect.options[i].value);
+  }
+};
+
+var onCheckOutChange = function () {
+  for (var i = 0; i < checkInSelect.options.length; i++) {
+    checkInSelect.options[i].selected = (checkOutSelect.value === checkInSelect.options[i].value);
+  }
+};
+
 disabledNoticeForm();
 onRoomNumberChange();
 mainMarker.addEventListener('mousedown', onMainMarkerMouseDown);
 mainMarker.addEventListener('keydown', onMainMarkerKeydown);
 roomNumberSelect.addEventListener('change', onRoomNumberChange);
+typeSelect.addEventListener('change', onTypeValidationChange);
+checkInSelect.addEventListener('change', onCheckInChange);
+checkOutSelect.addEventListener('change', onCheckOutChange);
