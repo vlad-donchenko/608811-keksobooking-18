@@ -11,6 +11,7 @@ var MAP_ADS_X_START_POINTS = 1;
 var MARKER_WIDTH = 50;
 var MARKER_HEIGHT = 70;
 var ENTER_KEYCODE = 13;
+var ESC_KEYCODE = 27;
 var ads = [];
 var map = document.querySelector('.map');
 var itemContainer = map.querySelector('.map__pins');
@@ -31,22 +32,30 @@ var roomNumberSelect = notice.querySelector('#room_number');
 var capacitySelect = notice.querySelector('#capacity');
 var mainForm = notice.querySelector('.ad-form');
 var mainFormFieldsets = mainForm.querySelectorAll('fieldset');
+var typeSelect = notice.querySelector('#type');
+var priceInput = notice.querySelector('#price');
+var checkInSelect = notice.querySelector('#timein');
+var checkOutSelect = notice.querySelector('#timeout');
 var types = {
   palace: {
     eng: 'palace',
-    ru: 'дворец'
+    ru: 'дворец',
+    startPrice: 10000
   },
   flat: {
     eng: 'flat',
-    ru: 'квартира'
+    ru: 'квартира',
+    startPrice: 1000
   },
   house: {
     eng: 'house',
-    ru: 'дом'
+    ru: 'дом',
+    startPrice: 5000
   },
   bungalo: {
     eng: 'bungalo',
-    ru: 'бунгало'
+    ru: 'бунгало',
+    startPrice: 0
   }
 };
 
@@ -119,16 +128,11 @@ var getAds = function (count) {
 
 getAds(COUNT_OFFERS);
 
-var getNewMarkers = function (object) {
-  var item = adsMarkerTemplate.cloneNode(true);
-  var itemButton = item.querySelector('.map__pin');
-  var markerImage = itemButton.querySelector('img');
-  itemButton.style.left = object.location.x - MARKER_WIDTH / 2 + 'px';
-  itemButton.style.top = object.location.y - MARKER_HEIGHT + 'px';
-  markerImage.src = object.author.avatar;
-  itemContainer.appendChild(item);
-
-  return item;
+var removeModal = function () {
+  var modal = map.querySelector('.popup');
+  if (modal) {
+    modal.remove();
+  }
 };
 
 var getofferModal = function (object) {
@@ -176,7 +180,49 @@ var getofferModal = function (object) {
   };
   addPhoto(object.offer.photos);
 
+  removeModal();
+
   map.insertBefore(modal, mapFilter);
+};
+
+var getNewMarkers = function (object) {
+  var item = adsMarkerTemplate.cloneNode(true);
+  var itemButton = item.querySelector('.map__pin');
+  var markerImage = itemButton.querySelector('img');
+  itemButton.style.left = object.location.x - MARKER_WIDTH / 2 + 'px';
+  itemButton.style.top = object.location.y - MARKER_HEIGHT + 'px';
+  markerImage.src = object.author.avatar;
+  itemContainer.appendChild(item);
+
+  var closeModal = function () {
+    var modal = map.querySelector('.popup');
+    var buttonClose = modal.querySelector('.popup__close');
+
+    buttonClose.addEventListener('click', function () {
+      removeModal();
+    });
+
+    document.addEventListener('keydown', function (evt) {
+      if (evt.keyCode === ESC_KEYCODE) {
+        removeModal();
+      }
+    });
+  };
+
+
+  itemButton.addEventListener('click', function () {
+    getofferModal(object);
+    closeModal();
+  });
+
+  itemButton.addEventListener('keyup', function (evt) {
+    if (evt.keyCode === ENTER_KEYCODE) {
+      getofferModal(object);
+      closeModal();
+    }
+  });
+
+  return item;
 };
 
 var disabledNoticeForm = function () {
@@ -198,7 +244,6 @@ var onMainMarkerMouseDown = function () {
   for (var i = 0; i < COUNT_OFFERS; i++) {
     getNewMarkers(ads[i]);
   }
-  getofferModal((ads[0]));
   activeNoticeForm();
   mainMarker.removeEventListener('mousedown', onMainMarkerMouseDown);
   mainMarker.removeEventListener('keydown', onMainMarkerKeydown);
@@ -222,8 +267,28 @@ var onRoomNumberChange = function () {
   }
 };
 
+var onTypeValidationChange = function () {
+  priceInput.min = types[typeSelect.value].startPrice;
+  priceInput.placeholder = types[typeSelect.value].startPrice;
+};
+
+var onCheckInChange = function () {
+  for (var i = 0; i < checkOutSelect.options.length; i++) {
+    checkOutSelect.options[i].selected = (checkInSelect.value === checkOutSelect.options[i].value);
+  }
+};
+
+var onCheckOutChange = function () {
+  for (var i = 0; i < checkInSelect.options.length; i++) {
+    checkInSelect.options[i].selected = (checkOutSelect.value === checkInSelect.options[i].value);
+  }
+};
+
 disabledNoticeForm();
 onRoomNumberChange();
 mainMarker.addEventListener('mousedown', onMainMarkerMouseDown);
 mainMarker.addEventListener('keydown', onMainMarkerKeydown);
 roomNumberSelect.addEventListener('change', onRoomNumberChange);
+typeSelect.addEventListener('change', onTypeValidationChange);
+checkInSelect.addEventListener('change', onCheckInChange);
+checkOutSelect.addEventListener('change', onCheckOutChange);
