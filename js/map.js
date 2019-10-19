@@ -1,6 +1,14 @@
 'use strict';
 
 (function () {
+  var MAIN_MARKER_HEIGHT = 80;
+  var MAIN_MARKER_WIDTH = 65;
+  var LIMITS = {
+    top: window.data.MAP_ADS_Y_START_POINTS - MAIN_MARKER_HEIGHT,
+    bottom: window.data.MAP_ADS_HEIGHT - MAIN_MARKER_HEIGHT,
+    left: -MAIN_MARKER_WIDTH / 2,
+    right: window.data.mapWidth - MAIN_MARKER_WIDTH / 2
+  };
   var notice = document.querySelector('.notice');
   var mainMarker = window.data.map.querySelector('.map__pin--main');
 
@@ -17,6 +25,22 @@
   var onMainMarkerKeydown = function (evt) {
     if (evt.keyCode === window.pin.ENTER_KEYCODE) {
       onMainMarkerMouseDown();
+    }
+  };
+
+  var correctMainMarkerMoveVertical = function () {
+    if (mainMarker.offsetTop < LIMITS.top) {
+      mainMarker.style.top = LIMITS.top + 'px';
+    } else if (mainMarker.offsetTop > LIMITS.bottom) {
+      mainMarker.style.top = LIMITS.bottom + 'px';
+    }
+  };
+
+  var correctMainMarkerMoveHorizontal = function () {
+    if (mainMarker.offsetLeft < LIMITS.left) {
+      mainMarker.style.left = LIMITS.left + 'px';
+    } else if (mainMarker.offsetLeft > LIMITS.right) {
+      mainMarker.style.left = LIMITS.right + 'px';
     }
   };
 
@@ -44,6 +68,8 @@
       mainMarker.style.top = (mainMarker.offsetTop - shift.y) + 'px';
       mainMarker.style.left = (mainMarker.offsetLeft - shift.x) + 'px';
 
+      correctMainMarkerMoveVertical();
+      correctMainMarkerMoveHorizontal();
     };
 
     var onMouseUp = function (upEvt) {
@@ -61,6 +87,8 @@
   mainMarker.addEventListener('keydown', onMainMarkerKeydown);
 
   window.map = {
+    MAIN_MARKER_HEIGHT: MAIN_MARKER_HEIGHT,
+    MAIN_MARKER_WIDTH: MAIN_MARKER_WIDTH,
     notice: notice,
     mainMarker: mainMarker
   };

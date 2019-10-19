@@ -1,8 +1,6 @@
 'use strict';
 
 (function () {
-  var MAIN_MARKER_HEIGHT = 80;
-  var MAIN_MARKER_WIDTH = 65;
   var mainForm = window.map.notice.querySelector('.ad-form');
   var mainFormFieldsets = mainForm.querySelectorAll('fieldset');
   var roomNumberSelect = window.map.notice.querySelector('#room_number');
@@ -11,8 +9,8 @@
   var typeSelect = window.map.notice.querySelector('#type');
   var checkInSelect = window.map.notice.querySelector('#timein');
   var checkOutSelect = window.map.notice.querySelector('#timeout');
-  var startMainMarkerPositionX = Math.round(window.map.mainMarker.offsetLeft + MAIN_MARKER_WIDTH / 2);
-  var startMainMarkerPositionY = Math.round(window.map.mainMarker.offsetTop + MAIN_MARKER_HEIGHT);
+  var startMainMarkerPositionX = Math.round(window.map.mainMarker.offsetLeft + window.map.MAIN_MARKER_WIDTH / 2);
+  var startMainMarkerPositionY = Math.round(window.map.mainMarker.offsetTop + window.map.MAIN_MARKER_HEIGHT);
   window.map.notice.querySelector('#address').value = startMainMarkerPositionX + ', ' + startMainMarkerPositionY;
 
   var ROOMS_CAPACITY = {
