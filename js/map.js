@@ -10,6 +10,7 @@
     right: window.data.mapWidth - MAIN_MARKER_WIDTH / 2
   };
   var notice = document.querySelector('.notice');
+  var locationInput = notice.querySelector('#address');
   var mainMarker = window.data.map.querySelector('.map__pin--main');
 
   var onMainMarkerMouseDown = function () {
@@ -34,6 +35,15 @@
     } else if (mainMarker.offsetTop > LIMITS.bottom) {
       mainMarker.style.top = LIMITS.bottom + 'px';
     }
+  };
+
+  var correctMarkerAddress = function (x, y) {
+    var pointX = parseInt(x, 10) + Math.round(MAIN_MARKER_WIDTH / 2);
+    var pointY = parseInt(y, 10) + Math.round(+MAIN_MARKER_HEIGHT);
+    if (pointX > window.data.mapWidth - MAIN_MARKER_WIDTH / 2) {
+      pointX = window.data.mapWidth;
+    }
+    locationInput.value = pointX + ', ' + pointY;
   };
 
   var correctMainMarkerMoveHorizontal = function () {
@@ -70,6 +80,7 @@
 
       correctMainMarkerMoveVertical();
       correctMainMarkerMoveHorizontal();
+      correctMarkerAddress(mainMarker.offsetLeft, mainMarker.offsetTop);
     };
 
     var onMouseUp = function (upEvt) {
@@ -90,7 +101,8 @@
     MAIN_MARKER_HEIGHT: MAIN_MARKER_HEIGHT,
     MAIN_MARKER_WIDTH: MAIN_MARKER_WIDTH,
     notice: notice,
-    mainMarker: mainMarker
+    mainMarker: mainMarker,
+    correctMarkerAddress: correctMarkerAddress
   };
 
 })();

@@ -49,6 +49,7 @@
   var onTypeValidationChange = function () {
     priceInput.min = window.data.types[typeSelect.value].startPrice;
     priceInput.placeholder = window.data.types[typeSelect.value].startPrice;
+    priceInput.value = '';
   };
 
   var onCheckInChange = function () {
@@ -71,6 +72,6 @@
   checkOutSelect.addEventListener('change', onCheckOutChange);
 
   window.form = {
-    activeNoticeForm: activeNoticeForm
+    activeNoticeForm: activeNoticeForm,
   };
 })();
