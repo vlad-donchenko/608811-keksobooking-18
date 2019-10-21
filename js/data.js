@@ -103,6 +103,9 @@
   getAds(COUNT_OFFERS);
 
   window.data = {
+    MAP_ADS_Y_START_POINTS: MAP_ADS_Y_START_POINTS,
+    MAP_ADS_HEIGHT: MAP_ADS_HEIGHT,
+    mapWidth: mapWidth,
     map: map,
     types: types,
     itemContainer: itemContainer,
