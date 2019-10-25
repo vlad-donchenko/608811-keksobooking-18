@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var LOAD_URL = 'https://js.dump.academy/keksobooking/data';
+  var LOAD_URL = 'https://js.dump.academy/keksobooking/dat';
   var COUNT_OFFERS = 8;
   var MAP_ADS_HEIGHT = 630;
   var MAP_ADS_Y_START_POINTS = 130;
@@ -36,8 +36,34 @@
   var showLoadErrorMassage = function (errorContent) {
     var errorTemplate = document.querySelector('#error').content;
     var errorElement = errorTemplate.cloneNode(true);
+    var closeButton = errorElement.querySelector('.error__button');
     errorElement.querySelector('.error__message').textContent = errorContent;
     mainHtmlContent.prepend(errorElement);
+
+    var closeError = function () {
+      document.querySelector('.error').remove();
+      document.removeEventListener('keydown', onCloseErrorPress);
+      document.removeEventListener('click', onCloseArbitraryAreaClick);
+    };
+
+    var onCloseErrorPress = function (evt) {
+      if (evt.keyCode === window.pin.ESC_KEYCODE) {
+        closeError();
+      }
+    };
+
+    var onCloseArbitraryAreaClick = function (evt) {
+      if (!evt.target.classList.contains('error__message')) {
+        closeError();
+      }
+    };
+
+    closeButton.addEventListener('click', function () {
+      closeError();
+    });
+
+    document.addEventListener('keydown', onCloseErrorPress);
+    document.addEventListener('click', onCloseArbitraryAreaClick);
   };
 
   var getAds = function (array) {
