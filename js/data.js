@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var LOAD_URL = 'https://js.dump.academy/keksobooking/dat';
+  var LOAD_URL = 'https://js.dump.academy/keksobooking/data';
   var COUNT_OFFERS = 8;
   var MAP_ADS_HEIGHT = 630;
   var MAP_ADS_Y_START_POINTS = 130;
