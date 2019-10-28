@@ -3,21 +3,60 @@
 (function () {
   var MAIN_MARKER_HEIGHT = 80;
   var MAIN_MARKER_WIDTH = 65;
-  var LIMITS = {
+  var notice = document.querySelector('.notice');
+  var locationInput = notice.querySelector('#address');
+  var mainMarker = window.data.map.querySelector('.map__pin--main');
+  var mainHtmlContent = document.querySelector('main');
+  var Limit = {
     top: window.data.MAP_ADS_Y_START_POINTS - MAIN_MARKER_HEIGHT,
     bottom: window.data.MAP_ADS_HEIGHT - MAIN_MARKER_HEIGHT,
     left: -MAIN_MARKER_WIDTH / 2,
     right: window.data.mapWidth - MAIN_MARKER_WIDTH / 2
   };
-  var notice = document.querySelector('.notice');
-  var locationInput = notice.querySelector('#address');
-  var mainMarker = window.data.map.querySelector('.map__pin--main');
+
+  var showLoadErrorMassage = function (errorContent) {
+    var errorTemplate = document.querySelector('#error').content;
+    var errorElement = errorTemplate.cloneNode(true);
+    var closeButton = errorElement.querySelector('.error__button');
+    errorElement.querySelector('.error__message').textContent = errorContent;
+    mainHtmlContent.prepend(errorElement);
+
+    var closeError = function () {
+      document.querySelector('.error').remove();
+      document.removeEventListener('keydown', onCloseErrorPress);
+      document.removeEventListener('click', onCloseArbitraryAreaClick);
+    };
+
+    var onCloseErrorPress = function (evt) {
+      if (evt.keyCode === window.pin.ESC_KEYCODE) {
+        closeError();
+      }
+    };
+
+    var onCloseArbitraryAreaClick = function (evt) {
+      if (!evt.target.classList.contains('error__message')) {
+        closeError();
+      }
+    };
+
+    closeButton.addEventListener('click', function () {
+      closeError();
+    });
+
+    document.addEventListener('keydown', onCloseErrorPress);
+    document.addEventListener('click', onCloseArbitraryAreaClick);
+  };
+
+
+  var renderMarkers = function (array) {
+    for (var i = 0; i < window.data.COUNT_OFFERS; i++) {
+      window.pin.getNewMarkers(array[i]);
+    }
+  };
 
   var onMainMarkerMouseDown = function () {
     window.data.map.classList.remove('map--faded');
-    for (var i = 0; i < window.data.COUNT_OFFERS; i++) {
-      window.pin.getNewMarkers(window.data.ads[i]);
-    }
+    window.data.load(renderMarkers, showLoadErrorMassage);
     window.form.activeNoticeForm();
     mainMarker.removeEventListener('mousedown', onMainMarkerMouseDown);
     mainMarker.removeEventListener('keydown', onMainMarkerKeydown);
@@ -30,10 +69,10 @@
   };
 
   var correctMainMarkerMoveVertical = function () {
-    if (mainMarker.offsetTop < LIMITS.top) {
-      mainMarker.style.top = LIMITS.top + 'px';
-    } else if (mainMarker.offsetTop > LIMITS.bottom) {
-      mainMarker.style.top = LIMITS.bottom + 'px';
+    if (mainMarker.offsetTop < Limit.top) {
+      mainMarker.style.top = Limit.top + 'px';
+    } else if (mainMarker.offsetTop > Limit.bottom) {
+      mainMarker.style.top = Limit.bottom + 'px';
     }
   };
 
@@ -47,10 +86,10 @@
   };
 
   var correctMainMarkerMoveHorizontal = function () {
-    if (mainMarker.offsetLeft < LIMITS.left) {
-      mainMarker.style.left = LIMITS.left + 'px';
-    } else if (mainMarker.offsetLeft > LIMITS.right) {
-      mainMarker.style.left = LIMITS.right + 'px';
+    if (mainMarker.offsetLeft < Limit.left) {
+      mainMarker.style.left = Limit.left + 'px';
+    } else if (mainMarker.offsetLeft > Limit.right) {
+      mainMarker.style.left = Limit.right + 'px';
     }
   };
 
