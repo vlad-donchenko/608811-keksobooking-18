@@ -45,13 +45,15 @@
 
     var addPhoto = function (array) {
       var photosWrapImage = modalPhotos.querySelector('.popup__photo');
-      photosWrapImage.src = '' + array[0];
       if (array.length > 0) {
+        photosWrapImage.src = '' + array[0];
         for (var i = 1; i < array.length; i++) {
           var newImage = photosWrapImage.cloneNode(true);
           newImage.src = array[i];
           modalPhotos.appendChild(newImage);
         }
+      } else {
+        photosWrapImage.remove();
       }
     };
     addPhoto(object.offer.photos);
