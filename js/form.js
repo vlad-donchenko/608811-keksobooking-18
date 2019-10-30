@@ -64,12 +64,19 @@
     }
   };
 
+  var deactivate = function () {
+
+  };
+
   disabledNoticeForm();
   onRoomNumberChange();
   roomNumberSelect.addEventListener('change', onRoomNumberChange);
   typeSelect.addEventListener('change', onTypeValidationChange);
   checkInSelect.addEventListener('change', onCheckInChange);
   checkOutSelect.addEventListener('change', onCheckOutChange);
+  mainForm.add('submit', function () {
+    window.data.save(deactivate, )
+  });
 
   window.form = {
     activeNoticeForm: activeNoticeForm,

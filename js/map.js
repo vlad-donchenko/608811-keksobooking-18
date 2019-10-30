@@ -56,7 +56,7 @@
 
   var onMainMarkerMouseDown = function () {
     window.data.map.classList.remove('map--faded');
-    window.data.load(renderMarkers, showLoadErrorMassage);
+    window.data.load(renderMarkers, showLoadErrorMassage, window.data.loadRequest);
     window.form.activeNoticeForm();
     mainMarker.removeEventListener('mousedown', onMainMarkerMouseDown);
     mainMarker.removeEventListener('keydown', onMainMarkerKeydown);
