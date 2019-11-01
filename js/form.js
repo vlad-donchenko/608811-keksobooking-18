@@ -9,7 +9,7 @@
   var typeSelect = window.map.notice.querySelector('#type');
   var checkInSelect = window.map.notice.querySelector('#timein');
   var checkOutSelect = window.map.notice.querySelector('#timeout');
-
+  var resetFormButton = window.map.notice.querySelector('.ad-form__reset');
   var ROOMS_CAPACITY = {
     '1': ['1'],
     '2': ['2', '1'],
@@ -72,6 +72,10 @@
 
   mainForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
+    window.data.save(window.map.deActivatePage, window.map.showLoadErrorMassage, window.data.saveRequest, new FormData(mainForm));
+  });
+
+  resetFormButton.addEventListener('click', function () {
     window.map.deActivatePage();
   });
 

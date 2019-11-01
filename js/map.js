@@ -25,7 +25,7 @@
     locationInput.value = startMainMarkerPositionX + ', ' + startMainMarkerPositionY;
   };
 
-  var showLoadErrorMassage = function (errorContent) {
+  var showErrorMassage = function (errorContent) {
     var errorTemplate = document.querySelector('#error').content;
     var errorElement = errorTemplate.cloneNode(true);
     var closeButton = errorElement.querySelector('.error__button');
@@ -58,6 +58,32 @@
     document.addEventListener('click', onCloseArbitraryAreaClick);
   };
 
+  var showMassageSuccess = function () {
+    var template = document.querySelector('#success').content;
+    var templateElement = template.cloneNode(true);
+    mainHtmlContent.prepend(templateElement);
+
+    var closeMassageSuccess = function () {
+      document.querySelector('.success').remove();
+      document.removeEventListener('keydown', onCloseMassageSuccessPress);
+      document.removeEventListener('click', onCloseArbitraryAreaClick);
+    };
+
+    var onCloseMassageSuccessPress = function (evt) {
+      if (evt.keyCode === window.pin.ESC_KEYCODE) {
+        closeMassageSuccess();
+      }
+    };
+
+    var onCloseArbitraryAreaClick = function (evt) {
+      if (!evt.target.classList.contains('success__message')) {
+        closeMassageSuccess();
+      }
+    };
+
+    document.addEventListener('keydown', onCloseMassageSuccessPress);
+    document.addEventListener('click', onCloseArbitraryAreaClick);
+  };
 
   var renderMarkers = function (array) {
     for (var i = 0; i < window.data.COUNT_OFFERS; i++) {
@@ -67,7 +93,7 @@
 
   var activatePage = function () {
     window.data.map.classList.remove('map--faded');
-    window.data.load(renderMarkers, showLoadErrorMassage, window.data.loadRequest);
+    window.data.load(renderMarkers, showErrorMassage, window.data.loadRequest);
     window.form.activeNoticeForm();
     mainMarker.removeEventListener('mousedown', onMainMarkerMouseDown);
     mainMarker.removeEventListener('keydown', onMainMarkerKeydown);
@@ -79,6 +105,7 @@
     window.form.onTypeValidationChange();
     window.form.disabledNoticeForm();
     window.form.mainForm.classList.add('ad-form--disabled');
+    showMassageSuccess();
   };
 
   var deActivateMap = function () {
@@ -191,7 +218,7 @@
     notice: notice,
     mainMarker: mainMarker,
     correctMarkerAddress: correctMarkerAddress,
-    showLoadErrorMassage: showLoadErrorMassage,
+    showLoadErrorMassage: showErrorMassage,
     deActivatePage: deActivatePage,
     writeCoordinates: writeCoordinates
   };
