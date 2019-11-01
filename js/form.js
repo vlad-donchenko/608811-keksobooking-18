@@ -9,16 +9,15 @@
   var typeSelect = window.map.notice.querySelector('#type');
   var checkInSelect = window.map.notice.querySelector('#timein');
   var checkOutSelect = window.map.notice.querySelector('#timeout');
-  var startMainMarkerPositionX = Math.round(window.map.mainMarker.offsetLeft + window.map.MAIN_MARKER_WIDTH / 2);
-  var startMainMarkerPositionY = Math.round(window.map.mainMarker.offsetTop + window.map.MAIN_MARKER_HEIGHT);
-  window.map.notice.querySelector('#address').value = startMainMarkerPositionX + ', ' + startMainMarkerPositionY;
-
+  var resetFormButton = window.map.notice.querySelector('.ad-form__reset');
   var ROOMS_CAPACITY = {
     '1': ['1'],
     '2': ['2', '1'],
     '3': ['3', '2', '1'],
     '100': ['0']
   };
+
+  window.map.writeCoordinates();
 
   var disabledNoticeForm = function () {
     for (var i = 0; i < mainFormFieldsets.length; i++) {
@@ -71,7 +70,19 @@
   checkInSelect.addEventListener('change', onCheckInChange);
   checkOutSelect.addEventListener('change', onCheckOutChange);
 
+  mainForm.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    window.data.save(window.map.deActivatePage, window.map.showLoadErrorMassage, window.data.saveRequest, new FormData(mainForm));
+  });
+
+  resetFormButton.addEventListener('click', function () {
+    window.map.deActivatePage();
+  });
+
   window.form = {
     activeNoticeForm: activeNoticeForm,
+    disabledNoticeForm: disabledNoticeForm,
+    mainForm: mainForm,
+    onTypeValidationChange: onTypeValidationChange
   };
 })();

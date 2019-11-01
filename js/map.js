@@ -7,6 +7,8 @@
   var locationInput = notice.querySelector('#address');
   var mainMarker = window.data.map.querySelector('.map__pin--main');
   var mainHtmlContent = document.querySelector('main');
+  var startMainMarkerPositionX = Math.round(mainMarker.offsetLeft + MAIN_MARKER_WIDTH / 2);
+  var startMainMarkerPositionY = Math.round(mainMarker.offsetTop + MAIN_MARKER_HEIGHT);
   var Limit = {
     top: window.data.MAP_ADS_Y_START_POINTS - MAIN_MARKER_HEIGHT,
     bottom: window.data.MAP_ADS_HEIGHT - MAIN_MARKER_HEIGHT,
@@ -14,7 +16,16 @@
     right: window.data.mapWidth - MAIN_MARKER_WIDTH / 2
   };
 
-  var showLoadErrorMassage = function (errorContent) {
+  var StartPosition = {
+    x: window.getComputedStyle(mainMarker, null).getPropertyValue('left'),
+    y: window.getComputedStyle(mainMarker, null).getPropertyValue('top')
+  };
+
+  var writeCoordinates = function () {
+    locationInput.value = startMainMarkerPositionX + ', ' + startMainMarkerPositionY;
+  };
+
+  var showErrorMassage = function (errorContent) {
     var errorTemplate = document.querySelector('#error').content;
     var errorElement = errorTemplate.cloneNode(true);
     var closeButton = errorElement.querySelector('.error__button');
@@ -47,6 +58,32 @@
     document.addEventListener('click', onCloseArbitraryAreaClick);
   };
 
+  var showMassageSuccess = function () {
+    var template = document.querySelector('#success').content;
+    var templateElement = template.cloneNode(true);
+    mainHtmlContent.prepend(templateElement);
+
+    var closeMassageSuccess = function () {
+      document.querySelector('.success').remove();
+      document.removeEventListener('keydown', onCloseMassageSuccessPress);
+      document.removeEventListener('click', onCloseArbitraryAreaClick);
+    };
+
+    var onCloseMassageSuccessPress = function (evt) {
+      if (evt.keyCode === window.pin.ESC_KEYCODE) {
+        closeMassageSuccess();
+      }
+    };
+
+    var onCloseArbitraryAreaClick = function (evt) {
+      if (!evt.target.classList.contains('success__message')) {
+        closeMassageSuccess();
+      }
+    };
+
+    document.addEventListener('keydown', onCloseMassageSuccessPress);
+    document.addEventListener('click', onCloseArbitraryAreaClick);
+  };
 
   var renderMarkers = function (array) {
     for (var i = 0; i < window.data.COUNT_OFFERS; i++) {
@@ -54,17 +91,56 @@
     }
   };
 
-  var onMainMarkerMouseDown = function () {
+  var activatePage = function () {
     window.data.map.classList.remove('map--faded');
-    window.data.load(renderMarkers, showLoadErrorMassage);
+    window.data.load(renderMarkers, showErrorMassage, window.data.loadRequest);
     window.form.activeNoticeForm();
     mainMarker.removeEventListener('mousedown', onMainMarkerMouseDown);
     mainMarker.removeEventListener('keydown', onMainMarkerKeydown);
   };
 
+  var deActiveNoticeForm = function () {
+    window.form.mainForm.reset();
+    writeCoordinates();
+    window.form.onTypeValidationChange();
+    window.form.disabledNoticeForm();
+    window.form.mainForm.classList.add('ad-form--disabled');
+    showMassageSuccess();
+  };
+
+  var deActivateMap = function () {
+    var items = window.data.map.querySelectorAll('.map__pin');
+    var modal = window.data.map.querySelector('.map__card');
+
+    if (modal) {
+      modal.remove();
+    }
+
+    for (var i = 0; i < items.length; i++) {
+      if (!items[i].classList.contains('map__pin--main')) {
+        items[i].remove();
+      }
+    }
+
+    mainMarker.style.top = StartPosition.y;
+    mainMarker.style.left = StartPosition.x;
+  };
+
+  var deActivatePage = function () {
+    window.data.map.classList.add('map--faded');
+    deActiveNoticeForm();
+    deActivateMap();
+    mainMarker.addEventListener('mousedown', onMainMarkerMouseDown);
+    mainMarker.addEventListener('keydown', onMainMarkerKeydown);
+  };
+
+  var onMainMarkerMouseDown = function () {
+    activatePage();
+  };
+
   var onMainMarkerKeydown = function (evt) {
     if (evt.keyCode === window.pin.ENTER_KEYCODE) {
-      onMainMarkerMouseDown();
+      activatePage();
     }
   };
 
@@ -141,7 +217,10 @@
     MAIN_MARKER_WIDTH: MAIN_MARKER_WIDTH,
     notice: notice,
     mainMarker: mainMarker,
-    correctMarkerAddress: correctMarkerAddress
+    correctMarkerAddress: correctMarkerAddress,
+    showLoadErrorMassage: showErrorMassage,
+    deActivatePage: deActivatePage,
+    writeCoordinates: writeCoordinates
   };
 
 })();
