@@ -93,6 +93,7 @@
   };
 
   var successLoad = function (data) {
+    offers = data.slice();
     renderMarkers(data);
   };
 
@@ -222,6 +223,9 @@
     MAIN_MARKER_HEIGHT: MAIN_MARKER_HEIGHT,
     MAIN_MARKER_WIDTH: MAIN_MARKER_WIDTH,
     notice: notice,
+    offers: function () {
+      return offers;
+    },
     mainMarker: mainMarker,
     correctMarkerAddress: correctMarkerAddress,
     showLoadErrorMassage: showErrorMassage,
