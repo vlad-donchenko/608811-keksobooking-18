@@ -57,7 +57,7 @@
   var onFormFilterChange = function () {
     var filterElements = Array.from(formFilter.children);
     window.map.removeMarker();
-    var filterOffers = getFilterData(window.map.offers().slice(), filterElements).slice(0, window.data.COUNT_OFFERS);
+    var filterOffers = getFilterData(window.map.getOffers().slice(), filterElements).slice(0, window.data.COUNT_OFFERS);
     window.map.renderMarkers(filterOffers);
   };
 
