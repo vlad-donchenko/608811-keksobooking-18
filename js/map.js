@@ -9,6 +9,7 @@
   var mainHtmlContent = document.querySelector('main');
   var startMainMarkerPositionX = Math.round(mainMarker.offsetLeft + MAIN_MARKER_WIDTH / 2);
   var startMainMarkerPositionY = Math.round(mainMarker.offsetTop + MAIN_MARKER_HEIGHT);
+  var offers = [];
   var Limit = {
     top: window.data.MAP_ADS_Y_START_POINTS - MAIN_MARKER_HEIGHT,
     bottom: window.data.MAP_ADS_HEIGHT - MAIN_MARKER_HEIGHT,
@@ -86,14 +87,19 @@
   };
 
   var renderMarkers = function (array) {
-    for (var i = 0; i < window.data.COUNT_OFFERS; i++) {
+    for (var i = 0; i < array.length; i++) {
       window.pin.getNewMarkers(array[i]);
     }
   };
 
+  var successLoad = function (data) {
+    offers = data.slice();
+    renderMarkers(data.slice(0, window.data.COUNT_OFFERS));
+  };
+
   var activatePage = function () {
     window.data.map.classList.remove('map--faded');
-    window.data.load(renderMarkers, showErrorMassage, window.data.loadRequest);
+    window.data.load(successLoad, showErrorMassage, window.data.loadRequest);
     window.form.activeNoticeForm();
     mainMarker.removeEventListener('mousedown', onMainMarkerMouseDown);
     mainMarker.removeEventListener('keydown', onMainMarkerKeydown);
@@ -108,20 +114,21 @@
     showMassageSuccess();
   };
 
-  var deActivateMap = function () {
-    var items = window.data.map.querySelectorAll('.map__pin');
+  var removeMarker = function () {
+    var items = window.data.map.querySelectorAll('.map__pin:not(.map__pin--main)');
     var modal = window.data.map.querySelector('.map__card');
 
     if (modal) {
       modal.remove();
     }
 
-    for (var i = 0; i < items.length; i++) {
-      if (!items[i].classList.contains('map__pin--main')) {
-        items[i].remove();
-      }
-    }
+    items.forEach(function (item) {
+      item.remove();
+    });
+  };
 
+  var deActivateMap = function () {
+    removeMarker();
     mainMarker.style.top = StartPosition.y;
     mainMarker.style.left = StartPosition.x;
   };
@@ -129,6 +136,7 @@
   var deActivatePage = function () {
     window.data.map.classList.add('map--faded');
     deActiveNoticeForm();
+    window.filter.resetFormFilter();
     deActivateMap();
     mainMarker.addEventListener('mousedown', onMainMarkerMouseDown);
     mainMarker.addEventListener('keydown', onMainMarkerKeydown);
@@ -216,11 +224,16 @@
     MAIN_MARKER_HEIGHT: MAIN_MARKER_HEIGHT,
     MAIN_MARKER_WIDTH: MAIN_MARKER_WIDTH,
     notice: notice,
+    offers: function () {
+      return offers;
+    },
     mainMarker: mainMarker,
     correctMarkerAddress: correctMarkerAddress,
     showLoadErrorMassage: showErrorMassage,
     deActivatePage: deActivatePage,
-    writeCoordinates: writeCoordinates
+    writeCoordinates: writeCoordinates,
+    renderMarkers: renderMarkers,
+    removeMarker: removeMarker
   };
 
 })();

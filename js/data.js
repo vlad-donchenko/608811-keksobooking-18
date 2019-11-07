@@ -3,7 +3,7 @@
 (function () {
   var LOAD_TIMEOUT = 10000;
   var SUCCESS_STATUS = 200;
-  var COUNT_OFFERS = 8;
+  var COUNT_OFFERS = 5;
   var MAP_ADS_HEIGHT = 630;
   var MAP_ADS_Y_START_POINTS = 130;
   var map = document.querySelector('.map');
