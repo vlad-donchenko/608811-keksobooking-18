@@ -42,6 +42,10 @@
     }
   };
 
+  var resetFormFilter = function () {
+    formFilter.reset();
+  };
+
   var getFilterData = function (data, elements) {
     return data.filter(function (item) {
       return elements.every(function (filter) {
@@ -58,5 +62,9 @@
   };
 
   formFilter.addEventListener('change', onFormFilterChange);
+
+  window.filter = {
+    resetFormFilter: resetFormFilter
+  };
 
 })();

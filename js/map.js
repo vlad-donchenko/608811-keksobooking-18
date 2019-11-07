@@ -136,6 +136,7 @@
   var deActivatePage = function () {
     window.data.map.classList.add('map--faded');
     deActiveNoticeForm();
+    window.filter.resetFormFilter();
     deActivateMap();
     mainMarker.addEventListener('mousedown', onMainMarkerMouseDown);
     mainMarker.addEventListener('keydown', onMainMarkerKeydown);
