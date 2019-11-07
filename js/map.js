@@ -87,14 +87,14 @@
   };
 
   var renderMarkers = function (array) {
-    for (var i = 0; i < window.data.COUNT_OFFERS; i++) {
+    for (var i = 0; i < array.length; i++) {
       window.pin.getNewMarkers(array[i]);
     }
   };
 
   var successLoad = function (data) {
     offers = data.slice();
-    renderMarkers(data);
+    renderMarkers(data.slice(0, window.data.COUNT_OFFERS));
   };
 
   var activatePage = function () {
