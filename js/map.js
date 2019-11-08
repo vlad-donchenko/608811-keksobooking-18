@@ -224,7 +224,7 @@
     MAIN_MARKER_HEIGHT: MAIN_MARKER_HEIGHT,
     MAIN_MARKER_WIDTH: MAIN_MARKER_WIDTH,
     notice: notice,
-    offers: function () {
+    getOffers: function () {
       return offers;
     },
     mainMarker: mainMarker,
