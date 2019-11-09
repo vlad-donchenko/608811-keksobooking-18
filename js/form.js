@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
   var mainForm = window.map.notice.querySelector('.ad-form');
   var mainFormFieldsets = mainForm.querySelectorAll('fieldset');
   var roomNumberSelect = window.map.notice.querySelector('#room_number');
@@ -10,12 +11,56 @@
   var checkInSelect = window.map.notice.querySelector('#timein');
   var checkOutSelect = window.map.notice.querySelector('#timeout');
   var resetFormButton = window.map.notice.querySelector('.ad-form__reset');
+  var userAvatarFileChooser = mainForm.querySelector('#avatar');
+  var userAvatarPreview = mainForm.querySelector('.ad-form-header__preview');
+  var roomImageFileChooser = mainForm.querySelector('#images');
+  var roomImagePreview = mainForm.querySelector('.ad-form__photo');
   var ROOMS_CAPACITY = {
     '1': ['1'],
     '2': ['2', '1'],
     '3': ['3', '2', '1'],
     '100': ['0']
   };
+
+
+  var getNewPreviewContainer = function (src) {
+    var image = document.createElement('img');
+    image.src = src;
+    image.alt = 'Фото жилья';
+    image.width = '70';
+    image.height = '70';
+    roomImagePreview.appendChild(image);
+  };
+
+  var getPreview = function (fileChooser, containerPreview) {
+
+    fileChooser.addEventListener('change', function () {
+      var file = fileChooser.files[0];
+      var fileName = file.name.toLowerCase();
+
+      var matches = FILE_TYPES.some(function (imgName) {
+        return fileName.endsWith(imgName);
+      });
+
+      if (matches) {
+        var reader = new FileReader();
+
+        reader.addEventListener('load', function () {
+          if (!containerPreview.classList.contains('ad-form__photo')) {
+            var image = containerPreview.querySelector('img');
+            image.src = reader.result;
+          } else {
+            getNewPreviewContainer(reader.result, containerPreview);
+          }
+        });
+
+        reader.readAsDataURL(file);
+      }
+    });
+  };
+
+  getPreview(userAvatarFileChooser, userAvatarPreview);
+  getPreview(roomImageFileChooser, roomImagePreview);
 
   window.map.writeCoordinates();
 

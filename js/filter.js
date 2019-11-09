@@ -61,7 +61,7 @@
     window.map.renderMarkers(filterOffers);
   };
 
-  formFilter.addEventListener('change', onFormFilterChange);
+  formFilter.addEventListener('change', window.debounce(onFormFilterChange));
 
   window.filter = {
     resetFormFilter: resetFormFilter
