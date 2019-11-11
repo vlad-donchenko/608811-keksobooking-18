@@ -4,13 +4,6 @@
   var mapFilter = window.data.map.querySelector('.map__filters-container');
   var offerInfoModalTemplate = document.querySelector('#card').content;
 
-  var removeModal = function () {
-    var modal = window.data.map.querySelector('.popup');
-    if (modal) {
-      modal.remove();
-    }
-  };
-
   var getOfferModal = function (object) {
     var modal = offerInfoModalTemplate.cloneNode(true);
     var modalTitle = modal.querySelector('.popup__title');
@@ -58,7 +51,7 @@
     };
     addPhoto(object.offer.photos);
 
-    removeModal();
+    window.pin.removeModal();
 
     window.data.map.insertBefore(modal, mapFilter);
   };

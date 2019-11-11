@@ -2,6 +2,7 @@
 
 (function () {
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+  var DEFAULT_AVATAR = 'img/muffin-grey.svg';
   var PREVIEW_ROOM_IMG_SIZE = 70;
   var mainForm = window.map.notice.querySelector('.ad-form');
   var mainFormFieldsets = mainForm.querySelectorAll('fieldset');
@@ -24,6 +25,10 @@
     '100': ['0']
   };
 
+  var disabledPreviewUserAvatar = function () {
+    var image = userAvatarPreview.querySelector('img');
+    image.src = DEFAULT_AVATAR;
+  };
 
   var getNewPreviewContainer = function (src, imageContainer) {
     var newImageContainer = imageContainer.cloneNode(false);
@@ -134,6 +139,7 @@
     activeNoticeForm: activeNoticeForm,
     disabledNoticeForm: disabledNoticeForm,
     mainForm: mainForm,
-    onTypeValidationChange: onTypeValidationChange
+    onTypeValidationChange: onTypeValidationChange,
+    disabledPreviewUserAvatar: disabledPreviewUserAvatar,
   };
 })();

@@ -10,6 +10,8 @@
   var removeModal = function () {
     var modal = window.data.map.querySelector('.popup');
     if (modal) {
+      var activeMarker = window.data.map.querySelector('.map__pin--active');
+      activeMarker.classList.remove('map__pin--active');
       modal.remove();
     }
   };
@@ -38,15 +40,16 @@
       });
     };
 
-
     itemButton.addEventListener('click', function () {
       window.card.getOfferModal(object);
+      itemButton.classList.add('map__pin--active');
       closeModal();
     });
 
     itemButton.addEventListener('keyup', function (evt) {
       if (evt.keyCode === ENTER_KEYCODE) {
         window.card.getOfferModal(object);
+        itemButton.classList.add('map__pin--active');
         closeModal();
       }
     });
@@ -57,6 +60,7 @@
   window.pin = {
     ENTER_KEYCODE: ENTER_KEYCODE,
     ESC_KEYCODE: ESC_KEYCODE,
-    getNewMarkers: getNewMarkers
+    getNewMarkers: getNewMarkers,
+    removeModal: removeModal
   };
 })();

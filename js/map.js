@@ -138,6 +138,7 @@
     deActiveNoticeForm();
     window.filter.resetFormFilter();
     deActivateMap();
+    window.form.disabledPreviewUserAvatar();
     mainMarker.addEventListener('mousedown', onMainMarkerMouseDown);
     mainMarker.addEventListener('keydown', onMainMarkerKeydown);
   };
