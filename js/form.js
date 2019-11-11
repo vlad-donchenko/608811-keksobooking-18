@@ -16,6 +16,7 @@
   var userAvatarPreview = mainForm.querySelector('.ad-form-header__preview');
   var roomImageFileChooser = mainForm.querySelector('#images');
   var roomImagePreview = mainForm.querySelector('.ad-form__photo');
+  var roomImagePreviewWrapper = mainForm.querySelector('.ad-form__photo-container');
   var ROOMS_CAPACITY = {
     '1': ['1'],
     '2': ['2', '1'],
@@ -24,38 +25,42 @@
   };
 
 
-  var getNewPreviewContainer = function (src) {
+  var getNewPreviewContainer = function (src, imageContainer) {
+    var newImageContainer = imageContainer.cloneNode(false);
     var image = document.createElement('img');
     image.src = src;
     image.alt = 'Фото жилья';
     image.width = PREVIEW_ROOM_IMG_SIZE;
     image.height = PREVIEW_ROOM_IMG_SIZE;
-    roomImagePreview.appendChild(image);
+    newImageContainer.appendChild(image);
+    roomImagePreviewWrapper.appendChild(newImageContainer);
+    imageContainer.remove();
   };
 
   var getPreview = function (fileChooser, containerPreview) {
 
     fileChooser.addEventListener('change', function () {
       var file = fileChooser.files[0];
-      var fileName = file.name.toLowerCase();
 
-      var matches = FILE_TYPES.some(function (imgName) {
-        return fileName.endsWith(imgName);
-      });
-
-      if (matches) {
-        var reader = new FileReader();
-
-        reader.addEventListener('load', function () {
-          if (!containerPreview.classList.contains('ad-form__photo')) {
-            var image = containerPreview.querySelector('img');
-            image.src = reader.result;
-          } else {
-            getNewPreviewContainer(reader.result, containerPreview);
-          }
+      if (file) {
+        var fileName = file.name.toLowerCase();
+        var matches = FILE_TYPES.some(function (imgName) {
+          return fileName.endsWith(imgName);
         });
 
-        reader.readAsDataURL(file);
+        if (matches) {
+          var reader = new FileReader();
+          reader.addEventListener('load', function () {
+            if (!containerPreview.classList.contains('ad-form__photo')) {
+              var image = containerPreview.querySelector('img');
+              image.src = reader.result;
+            } else {
+              getNewPreviewContainer(reader.result, containerPreview);
+            }
+          });
+
+          reader.readAsDataURL(file);
+        }
       }
     });
   };
