@@ -2,6 +2,7 @@
 
 (function () {
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+  var PREVIEW_ROOM_IMG_SIZE = 70;
   var mainForm = window.map.notice.querySelector('.ad-form');
   var mainFormFieldsets = mainForm.querySelectorAll('fieldset');
   var roomNumberSelect = window.map.notice.querySelector('#room_number');
@@ -27,8 +28,8 @@
     var image = document.createElement('img');
     image.src = src;
     image.alt = 'Фото жилья';
-    image.width = '70';
-    image.height = '70';
+    image.width = PREVIEW_ROOM_IMG_SIZE;
+    image.height = PREVIEW_ROOM_IMG_SIZE;
     roomImagePreview.appendChild(image);
   };
 
