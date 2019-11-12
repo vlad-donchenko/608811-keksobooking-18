@@ -2,7 +2,6 @@
 
 (function () {
   var formFilter = window.data.map.querySelector('.map__filters');
-
   var priceMap = {
     'low': {
       start: 0,
@@ -61,7 +60,7 @@
     window.map.renderMarkers(filterOffers);
   };
 
-  formFilter.addEventListener('change', onFormFilterChange);
+  formFilter.addEventListener('change', window.debounce(onFormFilterChange));
 
   window.filter = {
     resetFormFilter: resetFormFilter

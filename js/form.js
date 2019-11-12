@@ -1,6 +1,9 @@
 'use strict';
 
 (function () {
+  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+  var DEFAULT_AVATAR = 'img/muffin-grey.svg';
+  var PREVIEW_ROOM_IMG_SIZE = 70;
   var mainForm = window.map.notice.querySelector('.ad-form');
   var mainFormFieldsets = mainForm.querySelectorAll('fieldset');
   var roomNumberSelect = window.map.notice.querySelector('#room_number');
@@ -10,12 +13,65 @@
   var checkInSelect = window.map.notice.querySelector('#timein');
   var checkOutSelect = window.map.notice.querySelector('#timeout');
   var resetFormButton = window.map.notice.querySelector('.ad-form__reset');
+  var userAvatarFileChooser = mainForm.querySelector('#avatar');
+  var userAvatarPreview = mainForm.querySelector('.ad-form-header__preview');
+  var roomImageFileChooser = mainForm.querySelector('#images');
+  var roomImagePreview = mainForm.querySelector('.ad-form__photo');
+  var roomImagePreviewWrapper = mainForm.querySelector('.ad-form__photo-container');
   var ROOMS_CAPACITY = {
     '1': ['1'],
     '2': ['2', '1'],
     '3': ['3', '2', '1'],
     '100': ['0']
   };
+
+  var disabledPreviewUserAvatar = function () {
+    var image = userAvatarPreview.querySelector('img');
+    image.src = DEFAULT_AVATAR;
+  };
+
+  var getNewPreviewContainer = function (src, imageContainer) {
+    var newImageContainer = imageContainer.cloneNode(false);
+    var image = document.createElement('img');
+    image.src = src;
+    image.alt = 'Фото жилья';
+    image.width = PREVIEW_ROOM_IMG_SIZE;
+    image.height = PREVIEW_ROOM_IMG_SIZE;
+    newImageContainer.appendChild(image);
+    roomImagePreviewWrapper.appendChild(newImageContainer);
+    imageContainer.remove();
+  };
+
+  var getPreview = function (fileChooser, containerPreview) {
+
+    fileChooser.addEventListener('change', function () {
+      var file = fileChooser.files[0];
+
+      if (file) {
+        var fileName = file.name.toLowerCase();
+        var matches = FILE_TYPES.some(function (imgName) {
+          return fileName.endsWith(imgName);
+        });
+
+        if (matches) {
+          var reader = new FileReader();
+          reader.addEventListener('load', function () {
+            if (!containerPreview.classList.contains('ad-form__photo')) {
+              var image = containerPreview.querySelector('img');
+              image.src = reader.result;
+            } else {
+              getNewPreviewContainer(reader.result, containerPreview);
+            }
+          });
+
+          reader.readAsDataURL(file);
+        }
+      }
+    });
+  };
+
+  getPreview(userAvatarFileChooser, userAvatarPreview);
+  getPreview(roomImageFileChooser, roomImagePreview);
 
   window.map.writeCoordinates();
 
@@ -83,6 +139,7 @@
     activeNoticeForm: activeNoticeForm,
     disabledNoticeForm: disabledNoticeForm,
     mainForm: mainForm,
-    onTypeValidationChange: onTypeValidationChange
+    onTypeValidationChange: onTypeValidationChange,
+    disabledPreviewUserAvatar: disabledPreviewUserAvatar,
   };
 })();
