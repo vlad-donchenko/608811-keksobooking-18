@@ -86,9 +86,9 @@
   };
 
   var renderMarkers = function (array) {
-    for (var i = 0; i < array.length; i++) {
-      window.pin.getNewMarkers(array[i]);
-    }
+    array.forEach(function (item) {
+      window.pin.getNewMarkers(item);
+    });
   };
 
   var successLoad = function (data) {
