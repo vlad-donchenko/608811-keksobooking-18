@@ -17,8 +17,7 @@
   var userAvatarPreview = mainForm.querySelector('.ad-form-header__preview');
   var roomImageFileChooser = mainForm.querySelector('#images');
   var roomImagePreview = mainForm.querySelector('.ad-form__photo');
-  var roomImagePreviewWrapper = mainForm.querySelector('.ad-form__photo-container');
-  var ROOMS_CAPACITY = {
+  var RoomsCapacity = {
     '1': ['1'],
     '2': ['2', '1'],
     '3': ['3', '2', '1'],
@@ -30,16 +29,20 @@
     image.src = DEFAULT_AVATAR;
   };
 
-  var getNewPreviewContainer = function (src, imageContainer) {
-    var newImageContainer = imageContainer.cloneNode(false);
+  var disabledPreviewRoom = function () {
+    var image = roomImagePreview.querySelector('img');
+    if (image) {
+      image.remove();
+    }
+  };
+
+  var getNewPreviewContainer = function (src) {
     var image = document.createElement('img');
     image.src = src;
     image.alt = 'Фото жилья';
     image.width = PREVIEW_ROOM_IMG_SIZE;
     image.height = PREVIEW_ROOM_IMG_SIZE;
-    newImageContainer.appendChild(image);
-    roomImagePreviewWrapper.appendChild(newImageContainer);
-    imageContainer.remove();
+    roomImagePreview.appendChild(image);
   };
 
   var getPreview = function (fileChooser, containerPreview) {
@@ -77,24 +80,23 @@
 
   var disabledNoticeForm = function () {
     for (var i = 0; i < mainFormFieldsets.length; i++) {
-      mainFormFieldsets[i].setAttribute('disabled', 'disabled');
+      mainFormFieldsets[i].disabled = true;
     }
   };
 
   var activeNoticeForm = function () {
     for (var i = 0; i < mainFormFieldsets.length; i++) {
-      mainFormFieldsets[i].removeAttribute('disabled');
+      mainFormFieldsets[i].disabled = false;
     }
 
     mainForm.classList.remove('ad-form--disabled');
   };
 
   var onRoomNumberChange = function () {
-
     if (capacitySelect.options.length > 0) {
       [].forEach.call(capacitySelect.options, function (item) {
-        var status = !(ROOMS_CAPACITY[roomNumberSelect.value].indexOf(item.value) >= 0);
-        item.selected = (ROOMS_CAPACITY[roomNumberSelect.value][0] === item.value);
+        var status = !(RoomsCapacity[roomNumberSelect.value].indexOf(item.value) >= 0);
+        item.selected = (RoomsCapacity[roomNumberSelect.value][0] === item.value);
         item.hidden = status;
         item.disabled = status;
       });
@@ -141,5 +143,6 @@
     mainForm: mainForm,
     onTypeValidationChange: onTypeValidationChange,
     disabledPreviewUserAvatar: disabledPreviewUserAvatar,
+    disabledPreviewRoom: disabledPreviewRoom
   };
 })();

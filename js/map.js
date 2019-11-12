@@ -16,7 +16,6 @@
     left: -MAIN_MARKER_WIDTH / 2,
     right: window.data.mapWidth - MAIN_MARKER_WIDTH / 2
   };
-
   var StartPosition = {
     x: window.getComputedStyle(mainMarker, null).getPropertyValue('left'),
     y: window.getComputedStyle(mainMarker, null).getPropertyValue('top')
@@ -139,6 +138,7 @@
     window.filter.resetFormFilter();
     deActivateMap();
     window.form.disabledPreviewUserAvatar();
+    window.form.disabledPreviewRoom();
     mainMarker.addEventListener('mousedown', onMainMarkerMouseDown);
     mainMarker.addEventListener('keydown', onMainMarkerKeydown);
   };
