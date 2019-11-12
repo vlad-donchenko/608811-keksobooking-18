@@ -40,11 +40,11 @@
       var photosWrapImage = modalPhotos.querySelector('.popup__photo');
       if (array.length > 0) {
         photosWrapImage.src = '' + array[0];
-        for (var i = 1; i < array.length; i++) {
+        array.slice(1).forEach(function (photo) {
           var newImage = photosWrapImage.cloneNode(true);
-          newImage.src = array[i];
+          newImage.src = photo;
           modalPhotos.appendChild(newImage);
-        }
+        });
       } else {
         photosWrapImage.remove();
       }
