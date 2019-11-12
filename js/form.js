@@ -79,15 +79,15 @@
   window.map.writeCoordinates();
 
   var disabledNoticeForm = function () {
-    for (var i = 0; i < mainFormFieldsets.length; i++) {
-      mainFormFieldsets[i].disabled = true;
-    }
+    Array.from(mainFormFieldsets).forEach(function (item) {
+      item.disabled = true;
+    });
   };
 
   var activeNoticeForm = function () {
-    for (var i = 0; i < mainFormFieldsets.length; i++) {
-      mainFormFieldsets[i].disabled = false;
-    }
+    Array.from(mainFormFieldsets).forEach(function (item) {
+      item.disabled = false;
+    });
 
     mainForm.classList.remove('ad-form--disabled');
   };
@@ -110,15 +110,16 @@
   };
 
   var onCheckInChange = function () {
-    for (var i = 0; i < checkOutSelect.options.length; i++) {
-      checkOutSelect.options[i].selected = (checkInSelect.value === checkOutSelect.options[i].value);
-    }
+    Array.from(checkOutSelect.options).forEach(function (item, index) {
+      item.selected = (checkInSelect.value === checkOutSelect.options[index].value);
+    });
   };
 
   var onCheckOutChange = function () {
-    for (var i = 0; i < checkInSelect.options.length; i++) {
-      checkInSelect.options[i].selected = (checkOutSelect.value === checkInSelect.options[i].value);
-    }
+
+    Array.from(checkInSelect.options).forEach(function (item, index) {
+      item.selected = (checkOutSelect.value === checkInSelect.options[index].value);
+    });
   };
 
   disabledNoticeForm();
