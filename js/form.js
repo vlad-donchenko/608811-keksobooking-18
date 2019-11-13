@@ -78,13 +78,13 @@
 
   window.map.writeCoordinates();
 
-  var disabledNoticeForm = function () {
+  var makeDisabled = function () {
     Array.from(mainFormFieldsets).forEach(function (item) {
       item.disabled = true;
     });
   };
 
-  var activeNoticeForm = function () {
+  var makeActive = function () {
     Array.from(mainFormFieldsets).forEach(function (item) {
       item.disabled = false;
     });
@@ -122,7 +122,7 @@
     });
   };
 
-  disabledNoticeForm();
+  makeDisabled();
   onRoomNumberChange();
   roomNumberSelect.addEventListener('change', onRoomNumberChange);
   typeSelect.addEventListener('change', onTypeValidationChange);
@@ -139,8 +139,8 @@
   });
 
   window.form = {
-    activeNoticeForm: activeNoticeForm,
-    disabledNoticeForm: disabledNoticeForm,
+    makeActive: makeActive,
+    makeDisabled: makeDisabled,
     mainForm: mainForm,
     onTypeValidationChange: onTypeValidationChange,
     disabledPreviewUserAvatar: disabledPreviewUserAvatar,

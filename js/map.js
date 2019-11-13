@@ -99,7 +99,7 @@
   var activatePage = function () {
     window.data.map.classList.remove('map--faded');
     window.data.load(successLoad, showErrorMassage, window.data.loadRequest);
-    window.form.activeNoticeForm();
+    window.form.makeActive();
     mainMarker.removeEventListener('mousedown', onMainMarkerMouseDown);
     mainMarker.removeEventListener('keydown', onMainMarkerKeydown);
   };
@@ -108,7 +108,7 @@
     window.form.mainForm.reset();
     writeCoordinates();
     window.form.onTypeValidationChange();
-    window.form.disabledNoticeForm();
+    window.form.makeDisabled();
     window.form.mainForm.classList.add('ad-form--disabled');
     showMassageSuccess();
   };
