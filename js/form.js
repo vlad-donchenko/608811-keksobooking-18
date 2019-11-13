@@ -17,8 +17,7 @@
   var userAvatarPreview = mainForm.querySelector('.ad-form-header__preview');
   var roomImageFileChooser = mainForm.querySelector('#images');
   var roomImagePreview = mainForm.querySelector('.ad-form__photo');
-  var roomImagePreviewWrapper = mainForm.querySelector('.ad-form__photo-container');
-  var ROOMS_CAPACITY = {
+  var RoomsCapacity = {
     '1': ['1'],
     '2': ['2', '1'],
     '3': ['3', '2', '1'],
@@ -30,16 +29,20 @@
     image.src = DEFAULT_AVATAR;
   };
 
-  var getNewPreviewContainer = function (src, imageContainer) {
-    var newImageContainer = imageContainer.cloneNode(false);
+  var disabledPreviewRoom = function () {
+    var image = roomImagePreview.querySelector('img');
+    if (image) {
+      image.remove();
+    }
+  };
+
+  var getNewPreviewContainer = function (src) {
     var image = document.createElement('img');
     image.src = src;
     image.alt = 'Фото жилья';
     image.width = PREVIEW_ROOM_IMG_SIZE;
     image.height = PREVIEW_ROOM_IMG_SIZE;
-    newImageContainer.appendChild(image);
-    roomImagePreviewWrapper.appendChild(newImageContainer);
-    imageContainer.remove();
+    roomImagePreview.appendChild(image);
   };
 
   var getPreview = function (fileChooser, containerPreview) {
@@ -76,25 +79,24 @@
   window.map.writeCoordinates();
 
   var disabledNoticeForm = function () {
-    for (var i = 0; i < mainFormFieldsets.length; i++) {
-      mainFormFieldsets[i].setAttribute('disabled', 'disabled');
-    }
+    Array.from(mainFormFieldsets).forEach(function (item) {
+      item.disabled = true;
+    });
   };
 
   var activeNoticeForm = function () {
-    for (var i = 0; i < mainFormFieldsets.length; i++) {
-      mainFormFieldsets[i].removeAttribute('disabled');
-    }
+    Array.from(mainFormFieldsets).forEach(function (item) {
+      item.disabled = false;
+    });
 
     mainForm.classList.remove('ad-form--disabled');
   };
 
   var onRoomNumberChange = function () {
-
     if (capacitySelect.options.length > 0) {
       [].forEach.call(capacitySelect.options, function (item) {
-        var status = !(ROOMS_CAPACITY[roomNumberSelect.value].indexOf(item.value) >= 0);
-        item.selected = (ROOMS_CAPACITY[roomNumberSelect.value][0] === item.value);
+        var status = !(RoomsCapacity[roomNumberSelect.value].indexOf(item.value) >= 0);
+        item.selected = (RoomsCapacity[roomNumberSelect.value][0] === item.value);
         item.hidden = status;
         item.disabled = status;
       });
@@ -108,15 +110,16 @@
   };
 
   var onCheckInChange = function () {
-    for (var i = 0; i < checkOutSelect.options.length; i++) {
-      checkOutSelect.options[i].selected = (checkInSelect.value === checkOutSelect.options[i].value);
-    }
+    Array.from(checkOutSelect.options).forEach(function (item, index) {
+      item.selected = (checkInSelect.value === checkOutSelect.options[index].value);
+    });
   };
 
   var onCheckOutChange = function () {
-    for (var i = 0; i < checkInSelect.options.length; i++) {
-      checkInSelect.options[i].selected = (checkOutSelect.value === checkInSelect.options[i].value);
-    }
+
+    Array.from(checkInSelect.options).forEach(function (item, index) {
+      item.selected = (checkOutSelect.value === checkInSelect.options[index].value);
+    });
   };
 
   disabledNoticeForm();
@@ -141,5 +144,6 @@
     mainForm: mainForm,
     onTypeValidationChange: onTypeValidationChange,
     disabledPreviewUserAvatar: disabledPreviewUserAvatar,
+    disabledPreviewRoom: disabledPreviewRoom
   };
 })();

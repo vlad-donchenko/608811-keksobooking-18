@@ -26,13 +26,13 @@
     modalUserAvatar.src = object.author.avatar;
 
     var addFeatures = function (array) {
-      var childrens = modalFeatures.querySelectorAll('.popup__feature');
-      for (var i = 0; i < childrens.length; i++) {
-        var featureName = childrens[i].classList[1].replace('popup__feature--', '');
+      var children = Array.from(modalFeatures.querySelectorAll('.popup__feature'));
+      children.forEach(function (feature, index) {
+        var featureName = feature.classList[1].replace('popup__feature--', '');
         if (array.indexOf(featureName) === -1) {
-          childrens[i].remove();
+          children[index].remove();
         }
-      }
+      });
     };
     addFeatures(object.offer.features);
 
@@ -40,11 +40,11 @@
       var photosWrapImage = modalPhotos.querySelector('.popup__photo');
       if (array.length > 0) {
         photosWrapImage.src = '' + array[0];
-        for (var i = 1; i < array.length; i++) {
+        array.slice(1).forEach(function (photo) {
           var newImage = photosWrapImage.cloneNode(true);
-          newImage.src = array[i];
+          newImage.src = photo;
           modalPhotos.appendChild(newImage);
-        }
+        });
       } else {
         photosWrapImage.remove();
       }

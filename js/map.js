@@ -16,7 +16,6 @@
     left: -MAIN_MARKER_WIDTH / 2,
     right: window.data.mapWidth - MAIN_MARKER_WIDTH / 2
   };
-
   var StartPosition = {
     x: window.getComputedStyle(mainMarker, null).getPropertyValue('left'),
     y: window.getComputedStyle(mainMarker, null).getPropertyValue('top')
@@ -87,9 +86,9 @@
   };
 
   var renderMarkers = function (array) {
-    for (var i = 0; i < array.length; i++) {
-      window.pin.getNewMarkers(array[i]);
-    }
+    array.forEach(function (item) {
+      window.pin.getNewMarkers(item);
+    });
   };
 
   var successLoad = function (data) {
@@ -139,6 +138,7 @@
     window.filter.resetFormFilter();
     deActivateMap();
     window.form.disabledPreviewUserAvatar();
+    window.form.disabledPreviewRoom();
     mainMarker.addEventListener('mousedown', onMainMarkerMouseDown);
     mainMarker.addEventListener('keydown', onMainMarkerKeydown);
   };
