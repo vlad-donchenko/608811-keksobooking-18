@@ -135,7 +135,7 @@
   var deActivatePage = function () {
     window.data.map.classList.add('map--faded');
     deActiveNoticeForm();
-    window.filter.resetFormFilter();
+    window.sorter.resetFormFilter();
     deActivateMap();
     window.form.disabledPreviewUserAvatar();
     window.form.disabledPreviewRoom();
