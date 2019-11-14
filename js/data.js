@@ -32,14 +32,14 @@
     }
   };
 
-  var loadRequest = {
-    url: 'https://js.dump.academy/keksobooking/data',
-    method: 'GET'
+  var LoadRequest = {
+    URL: 'https://js.dump.academy/keksobooking/data',
+    METHOD: 'GET'
   };
 
-  var saveRequest = {
-    url: 'https://js.dump.academy/keksobooking',
-    method: 'POST'
+  var SaveRequest = {
+    URL: 'https://js.dump.academy/keksobooking',
+    METHOD: 'POST'
   };
 
   var request = function (onSuccess, onError, object, data) {
@@ -64,7 +64,7 @@
 
     xhr.timeout = LOAD_TIMEOUT; // 10s
 
-    xhr.open(object.method, object.url);
+    xhr.open(object.METHOD, object.URL);
 
     if (data) {
       xhr.send(data);
@@ -81,8 +81,8 @@
     map: map,
     types: types,
     itemContainer: itemContainer,
-    loadRequest: loadRequest,
-    saveRequest: saveRequest,
+    LoadRequest: LoadRequest,
+    SaveRequest: SaveRequest,
     load: request,
     save: request
   };

@@ -106,7 +106,6 @@
   var onTypeValidationChange = function () {
     priceInput.min = window.data.types[typeSelect.value].startPrice;
     priceInput.placeholder = window.data.types[typeSelect.value].startPrice;
-    priceInput.value = '';
   };
 
   var onCheckInChange = function () {
@@ -131,7 +130,7 @@
 
   main.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.data.save(window.map.deActivatePage, window.map.showLoadErrorMassage, window.data.saveRequest, new FormData(main));
+    window.data.save(window.map.deActivatePage, window.map.showLoadErrorMassage, window.data.SaveRequest, new FormData(main));
   });
 
   resetFormButton.addEventListener('click', function () {

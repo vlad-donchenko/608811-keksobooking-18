@@ -98,7 +98,7 @@
 
   var activatePage = function () {
     window.data.map.classList.remove('map--faded');
-    window.data.load(successLoad, showErrorMassage, window.data.loadRequest);
+    window.data.load(successLoad, showErrorMassage, window.data.LoadRequest);
     window.form.makeActive();
     mainMarker.removeEventListener('mousedown', onMainMarkerMouseDown);
     mainMarker.removeEventListener('keydown', onMainMarkerKeydown);
