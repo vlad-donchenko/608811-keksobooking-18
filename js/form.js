@@ -4,8 +4,8 @@
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
   var DEFAULT_AVATAR = 'img/muffin-grey.svg';
   var PREVIEW_ROOM_IMG_SIZE = 70;
-  var mainForm = window.map.notice.querySelector('.ad-form');
-  var mainFormFieldsets = mainForm.querySelectorAll('fieldset');
+  var main = window.map.notice.querySelector('.ad-form');
+  var mainFormFieldsets = main.querySelectorAll('fieldset');
   var roomNumberSelect = window.map.notice.querySelector('#room_number');
   var capacitySelect = window.map.notice.querySelector('#capacity');
   var priceInput = window.map.notice.querySelector('#price');
@@ -13,10 +13,10 @@
   var checkInSelect = window.map.notice.querySelector('#timein');
   var checkOutSelect = window.map.notice.querySelector('#timeout');
   var resetFormButton = window.map.notice.querySelector('.ad-form__reset');
-  var userAvatarFileChooser = mainForm.querySelector('#avatar');
-  var userAvatarPreview = mainForm.querySelector('.ad-form-header__preview');
-  var roomImageFileChooser = mainForm.querySelector('#images');
-  var roomImagePreview = mainForm.querySelector('.ad-form__photo');
+  var userAvatarFileChooser = main.querySelector('#avatar');
+  var userAvatarPreview = main.querySelector('.ad-form-header__preview');
+  var roomImageFileChooser = main.querySelector('#images');
+  var roomImagePreview = main.querySelector('.ad-form__photo');
   var RoomsCapacity = {
     '1': ['1'],
     '2': ['2', '1'],
@@ -78,18 +78,18 @@
 
   window.map.writeCoordinates();
 
-  var disabledNoticeForm = function () {
+  var makeDisabled = function () {
     Array.from(mainFormFieldsets).forEach(function (item) {
       item.disabled = true;
     });
   };
 
-  var activeNoticeForm = function () {
+  var makeActive = function () {
     Array.from(mainFormFieldsets).forEach(function (item) {
       item.disabled = false;
     });
 
-    mainForm.classList.remove('ad-form--disabled');
+    main.classList.remove('ad-form--disabled');
   };
 
   var onRoomNumberChange = function () {
@@ -122,16 +122,16 @@
     });
   };
 
-  disabledNoticeForm();
+  makeDisabled();
   onRoomNumberChange();
   roomNumberSelect.addEventListener('change', onRoomNumberChange);
   typeSelect.addEventListener('change', onTypeValidationChange);
   checkInSelect.addEventListener('change', onCheckInChange);
   checkOutSelect.addEventListener('change', onCheckOutChange);
 
-  mainForm.addEventListener('submit', function (evt) {
+  main.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.data.save(window.map.deActivatePage, window.map.showLoadErrorMassage, window.data.saveRequest, new FormData(mainForm));
+    window.data.save(window.map.deActivatePage, window.map.showLoadErrorMassage, window.data.saveRequest, new FormData(main));
   });
 
   resetFormButton.addEventListener('click', function () {
@@ -139,9 +139,9 @@
   });
 
   window.form = {
-    activeNoticeForm: activeNoticeForm,
-    disabledNoticeForm: disabledNoticeForm,
-    mainForm: mainForm,
+    makeActive: makeActive,
+    makeDisabled: makeDisabled,
+    main: main,
     onTypeValidationChange: onTypeValidationChange,
     disabledPreviewUserAvatar: disabledPreviewUserAvatar,
     disabledPreviewRoom: disabledPreviewRoom

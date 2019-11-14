@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var DEBOUNCE_INTERVAL = 500;
   var formFilter = window.data.map.querySelector('.map__filters');
   var priceMap = {
     'low': {
@@ -15,6 +16,20 @@
       start: 50000,
       end: Infinity
     }
+  };
+
+  var debounce = function (cb) {
+    var lastTimeout = null;
+
+    return function () {
+      var parameters = arguments;
+      if (lastTimeout) {
+        window.clearTimeout(lastTimeout);
+      }
+      lastTimeout = window.setTimeout(function () {
+        cb.apply(null, parameters);
+      }, DEBOUNCE_INTERVAL);
+    };
   };
 
   var filterRule = {
@@ -60,10 +75,9 @@
     window.map.renderMarkers(filterOffers);
   };
 
-  formFilter.addEventListener('change', window.debounce(onFormFilterChange));
+  formFilter.addEventListener('change', debounce(onFormFilterChange));
 
-  window.filter = {
+  window.sorter = {
     resetFormFilter: resetFormFilter
   };
-
 })();

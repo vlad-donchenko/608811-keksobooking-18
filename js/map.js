@@ -99,17 +99,17 @@
   var activatePage = function () {
     window.data.map.classList.remove('map--faded');
     window.data.load(successLoad, showErrorMassage, window.data.loadRequest);
-    window.form.activeNoticeForm();
+    window.form.makeActive();
     mainMarker.removeEventListener('mousedown', onMainMarkerMouseDown);
     mainMarker.removeEventListener('keydown', onMainMarkerKeydown);
   };
 
   var deActiveNoticeForm = function () {
-    window.form.mainForm.reset();
+    window.form.main.reset();
     writeCoordinates();
     window.form.onTypeValidationChange();
-    window.form.disabledNoticeForm();
-    window.form.mainForm.classList.add('ad-form--disabled');
+    window.form.makeDisabled();
+    window.form.main.classList.add('ad-form--disabled');
     showMassageSuccess();
   };
 
@@ -135,7 +135,7 @@
   var deActivatePage = function () {
     window.data.map.classList.add('map--faded');
     deActiveNoticeForm();
-    window.filter.resetFormFilter();
+    window.sorter.resetFormFilter();
     deActivateMap();
     window.form.disabledPreviewUserAvatar();
     window.form.disabledPreviewRoom();
@@ -236,5 +236,4 @@
     renderMarkers: renderMarkers,
     removeMarker: removeMarker
   };
-
 })();
