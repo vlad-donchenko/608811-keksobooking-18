@@ -30,7 +30,6 @@
     itemButton.style.left = object.location.x - MARKER_WIDTH / 2 + 'px';
     itemButton.style.top = object.location.y - MARKER_HEIGHT + 'px';
     markerImage.src = object.author.avatar;
-    window.data.itemContainer.appendChild(item);
 
     var closeModal = function () {
       var modal = window.data.map.querySelector('.popup');

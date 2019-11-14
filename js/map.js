@@ -86,9 +86,13 @@
   };
 
   var renderMarkers = function (array) {
+    var fragment = document.createDocumentFragment();
+
     array.forEach(function (item) {
-      window.pin.getNewMarkers(item);
+      fragment.append(window.pin.getNewMarkers(item));
     });
+
+    window.data.itemContainer.appendChild(fragment);
   };
 
   var successLoad = function (data) {
