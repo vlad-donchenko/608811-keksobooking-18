@@ -80,5 +80,4 @@
   window.sorter = {
     resetFormFilter: resetFormFilter
   };
-
 })();
