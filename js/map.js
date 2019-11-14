@@ -105,11 +105,11 @@
   };
 
   var deActiveNoticeForm = function () {
-    window.form.mainForm.reset();
+    window.form.main.reset();
     writeCoordinates();
     window.form.onTypeValidationChange();
     window.form.makeDisabled();
-    window.form.mainForm.classList.add('ad-form--disabled');
+    window.form.main.classList.add('ad-form--disabled');
     showMassageSuccess();
   };
 
