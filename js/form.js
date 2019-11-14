@@ -115,7 +115,6 @@
   };
 
   var onCheckOutChange = function () {
-
     Array.from(checkInSelect.options).forEach(function (item, index) {
       item.selected = (checkOutSelect.value === checkInSelect.options[index].value);
     });

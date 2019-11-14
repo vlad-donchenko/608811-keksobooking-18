@@ -13,6 +13,13 @@
       var activeMarker = window.data.map.querySelector('.map__pin--active');
       activeMarker.classList.remove('map__pin--active');
       modal.remove();
+      document.removeEventListener('keydown', onRemoveModalKeydown);
+    }
+  };
+
+  var onRemoveModalKeydown = function (evt) {
+    if (evt.keyCode === ESC_KEYCODE) {
+      removeModal();
     }
   };
 
@@ -33,11 +40,7 @@
         removeModal();
       });
 
-      document.addEventListener('keydown', function (evt) {
-        if (evt.keyCode === ESC_KEYCODE) {
-          removeModal();
-        }
-      });
+      document.addEventListener('keydown', onRemoveModalKeydown);
     };
 
     itemButton.addEventListener('click', function () {
