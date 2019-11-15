@@ -10,13 +10,13 @@
   var startMainMarkerPositionX = Math.round(mainMarker.offsetLeft + MAIN_MARKER_WIDTH / 2);
   var startMainMarkerPositionY = Math.round(mainMarker.offsetTop + MAIN_MARKER_HEIGHT);
   var offers = [];
-  var Limit = {
+  var limit = {
     top: window.data.MAP_ADS_Y_START_POINTS - MAIN_MARKER_HEIGHT,
     bottom: window.data.MAP_ADS_HEIGHT - MAIN_MARKER_HEIGHT,
     left: -MAIN_MARKER_WIDTH / 2,
     right: window.data.mapWidth - MAIN_MARKER_WIDTH / 2
   };
-  var StartPosition = {
+  var startPosition = {
     x: window.getComputedStyle(mainMarker, null).getPropertyValue('left'),
     y: window.getComputedStyle(mainMarker, null).getPropertyValue('top')
   };
@@ -86,9 +86,13 @@
   };
 
   var renderMarkers = function (array) {
+    var fragment = document.createDocumentFragment();
+
     array.forEach(function (item) {
-      window.pin.getNewMarkers(item);
+      fragment.append(window.pin.getNewMarkers(item));
     });
+
+    window.data.itemContainer.appendChild(fragment);
   };
 
   var successLoad = function (data) {
@@ -98,7 +102,7 @@
 
   var activatePage = function () {
     window.data.map.classList.remove('map--faded');
-    window.data.load(successLoad, showErrorMassage, window.data.loadRequest);
+    window.data.load(successLoad, showErrorMassage, window.data.LoadRequest);
     window.form.makeActive();
     mainMarker.removeEventListener('mousedown', onMainMarkerMouseDown);
     mainMarker.removeEventListener('keydown', onMainMarkerKeydown);
@@ -128,8 +132,8 @@
 
   var deActivateMap = function () {
     removeMarker();
-    mainMarker.style.top = StartPosition.y;
-    mainMarker.style.left = StartPosition.x;
+    mainMarker.style.top = startPosition.y;
+    mainMarker.style.left = startPosition.x;
   };
 
   var deActivatePage = function () {
@@ -154,10 +158,10 @@
   };
 
   var correctMainMarkerMoveVertical = function () {
-    if (mainMarker.offsetTop < Limit.top) {
-      mainMarker.style.top = Limit.top + 'px';
-    } else if (mainMarker.offsetTop > Limit.bottom) {
-      mainMarker.style.top = Limit.bottom + 'px';
+    if (mainMarker.offsetTop < limit.top) {
+      mainMarker.style.top = limit.top + 'px';
+    } else if (mainMarker.offsetTop > limit.bottom) {
+      mainMarker.style.top = limit.bottom + 'px';
     }
   };
 
@@ -171,10 +175,10 @@
   };
 
   var correctMainMarkerMoveHorizontal = function () {
-    if (mainMarker.offsetLeft < Limit.left) {
-      mainMarker.style.left = Limit.left + 'px';
-    } else if (mainMarker.offsetLeft > Limit.right) {
-      mainMarker.style.left = Limit.right + 'px';
+    if (mainMarker.offsetLeft < limit.left) {
+      mainMarker.style.left = limit.left + 'px';
+    } else if (mainMarker.offsetLeft > limit.right) {
+      mainMarker.style.left = limit.right + 'px';
     }
   };
 

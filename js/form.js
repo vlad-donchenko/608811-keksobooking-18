@@ -106,7 +106,6 @@
   var onTypeValidationChange = function () {
     priceInput.min = window.data.types[typeSelect.value].startPrice;
     priceInput.placeholder = window.data.types[typeSelect.value].startPrice;
-    priceInput.value = '';
   };
 
   var onCheckInChange = function () {
@@ -116,7 +115,6 @@
   };
 
   var onCheckOutChange = function () {
-
     Array.from(checkInSelect.options).forEach(function (item, index) {
       item.selected = (checkOutSelect.value === checkInSelect.options[index].value);
     });
@@ -131,7 +129,7 @@
 
   main.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.data.save(window.map.deActivatePage, window.map.showLoadErrorMassage, window.data.saveRequest, new FormData(main));
+    window.data.save(window.map.deActivatePage, window.map.showLoadErrorMassage, window.data.SaveRequest, new FormData(main));
   });
 
   resetFormButton.addEventListener('click', function () {

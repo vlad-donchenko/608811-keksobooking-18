@@ -13,6 +13,13 @@
       var activeMarker = window.data.map.querySelector('.map__pin--active');
       activeMarker.classList.remove('map__pin--active');
       modal.remove();
+      document.removeEventListener('keydown', onRemoveModalKeydown);
+    }
+  };
+
+  var onRemoveModalKeydown = function (evt) {
+    if (evt.keyCode === ESC_KEYCODE) {
+      removeModal();
     }
   };
 
@@ -23,7 +30,6 @@
     itemButton.style.left = object.location.x - MARKER_WIDTH / 2 + 'px';
     itemButton.style.top = object.location.y - MARKER_HEIGHT + 'px';
     markerImage.src = object.author.avatar;
-    window.data.itemContainer.appendChild(item);
 
     var closeModal = function () {
       var modal = window.data.map.querySelector('.popup');
@@ -33,11 +39,7 @@
         removeModal();
       });
 
-      document.addEventListener('keydown', function (evt) {
-        if (evt.keyCode === ESC_KEYCODE) {
-          removeModal();
-        }
-      });
+      document.addEventListener('keydown', onRemoveModalKeydown);
     };
 
     itemButton.addEventListener('click', function () {
